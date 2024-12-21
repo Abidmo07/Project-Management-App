@@ -17,7 +17,7 @@ class ProjectController extends Controller
     {
         $sort_field=request("sort_field","created_at");
         $sort_direction =request("sort_direction","asc");
-        $projects = Project::orderBy($sort_field,$sort_direction)->paginate(10);
+        $projects = Project::orderBy($sort_field,$sort_direction)->with("createdby","updatedby")->paginate(10);
         return Inertia::render("Project/Index", ["projects"=>$projects,"sort_field"=>$sort_field,"sort_direction"=>$sort_direction]);
     }
 
@@ -42,7 +42,7 @@ class ProjectController extends Controller
      */
     public function show(Project $project)
     {
-        
+        return Inertia::render("Project/Show", ["project"=> $project]);
     }
 
     /**
