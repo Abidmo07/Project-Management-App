@@ -2,11 +2,10 @@ import Pagination from '@/Components/Pagination'
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout'
 import { Head, Link, router } from '@inertiajs/react'
 import React, { useEffect, useState } from 'react'
-import DataTable from 'datatables.net-react';
-import DT from 'datatables.net-dt';
+
 
  
-DataTable.use(DT);
+
 
 export default function Index({ projects,sort_direction,sort_field }) {
     
@@ -72,20 +71,20 @@ export default function Index({ projects,sort_direction,sort_field }) {
       <tr>
         <th onClick={()=>{
           handleSort("id")
-        }}   className="px-10 py-3 flex ">Id <span >{field === "id" ? (direction === "asc" ? "↑" : "↓") : ""}</span> </th>
+        }}   className="px-6 py-3 cursor-pointer flex gap-1  ">Id <span  >{field === "id" ? (direction === "asc" ? "↑" : "↓") : ""}</span> </th>
         <th onClick={()=>{
           handleSort("name")
-        }}  className="px-6 py-3">Name <span>{field === "name" ? (direction === "asc" ? "↑" : "↓") : ""}</span> </th>
+        }}  className="px-6 py-3 cursor-pointer">Name <span>{field === "name" ? (direction === "asc" ? "↑" : "↓") : ""}</span> </th>
         <th  className="px-6 py-3">Image</th>
         <th onClick={()=>{
           handleSort("description")
-        }} className="px-6 py-3">Description <span>{field === "description" ? (direction === "asc" ? "↑" : "↓") : ""}</span> </th>
+        }} className="px-6 py-3 cursor-pointer">Description <span>{field === "description" ? (direction === "asc" ? "↑" : "↓") : ""}</span> </th>
         <th onClick={()=>{
           handleSort("status")
-        }} className="px-6 py-3">status <span>{field === "status" ? (direction === "asc" ? "↑" : "↓") : ""}</span> </th>
+        }} className="px-6 py-3 cursor-pointer">status <span>{field === "status" ? (direction === "asc" ? "↑" : "↓") : ""}</span> </th>
         <th onClick={()=>{
           handleSort("due_date")
-        }} className="px-6 py-3">Due Date <span>{field === "due_date" ? (direction === "asc" ? "↑" : "↓") : ""}</span> </th>
+        }} className="px-6 py-3 cursor-pointer">Due Date <span>{field === "due_date" ? (direction === "asc" ? "↑" : "↓") : ""}</span> </th>
         <th className="px-6 py-3">Actions</th>
       </tr>
     </thead>
@@ -124,7 +123,7 @@ export default function Index({ projects,sort_direction,sort_field }) {
       {search || selecte?    filtredProjects.map((filtred)=>(
         <tr className="bg-white hover:bg-gray-50" key={filtred.id}>
           <td className="px-6 py-3">{filtred.id}</td>
-          <td className="px-6 py-3">{filtred.name}</td>
+          <td className="px-6 py-3 "> <Link href={route('project.show',filtred.id)}>{filtred.name}</Link></td>
           <td className="px-6 py-3">{filtred.image_path}</td>
           <td className="px-6 py-3">{filtred.description}</td>
           <td className={`px-6 py-3 text-center  ${filtred.status=='pending'?'bg-yellow-300':
@@ -139,7 +138,7 @@ export default function Index({ projects,sort_direction,sort_field }) {
       )):projects.data.map((project)=>(
         <tr key={project.id} className="bg-white hover:bg-gray-50">
        <td className="px-6 py-3">{project.id}</td>
-       <td className="px-6 py-3"> {project.name}</td>
+       <td className="px-6 py-3"> <Link href={route('project.show',project.id)}>{project.name}</Link> </td>
        <td className="px-6 py-3"><img className='w-20' src={project.image_path} alt={project.name} /></td>
        <td className="px-6 py-3">{project.description}</td>
        <td className={`px-6 py-3 text-center  ${project.status=='pending'?'bg-yellow-300':

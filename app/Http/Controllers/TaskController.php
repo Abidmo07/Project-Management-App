@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreTaskRequest;
 use App\Http\Requests\UpdateTaskRequest;
+use App\Models\Project;
 use App\Models\Task;
 
 class TaskController extends Controller
@@ -13,7 +14,11 @@ class TaskController extends Controller
      */
     public function index()
     {
-        return inertia('Task/Index',[]);
+        $sort_field=request("sort_field","created_at");
+        $sort_direction =request("sort_direction","asc");
+    
+        $tasks_order=Task::orderBy($sort_field,$sort_direction)->with(["assign_user","createdby","project"])->paginate(10);
+        return inertia('Task/Index',["tasks"=> $tasks_order,"sort_direction"=>$sort_direction,"sort_field"=>$sort_field]);
     }
 
     /**
