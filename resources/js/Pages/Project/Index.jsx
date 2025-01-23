@@ -7,7 +7,7 @@ import React, { useEffect, useState } from 'react'
  
 
 
-export default function Index({ projects,sort_direction,sort_field }) {
+export default function Index({ projects,sort_direction,sort_field,success }) {
     
 
    const [search,setSearch]= useState('');
@@ -55,16 +55,24 @@ export default function Index({ projects,sort_direction,sort_field }) {
   return (
     <AuthenticatedLayout 
       header={
-        <h2 className="text-xl font-semibold leading-tight text-gray-800">
+        <div className='flex justify-between items-center'>
+  <h2 className="text-xl font-semibold leading-tight text-gray-800">
           Projects
         </h2>
+        <div>
+        <Link className='bg-green-500 text-white p-4 rounded-lg hover:bg-green-600' href={route('project.create')}>Add Project</Link>
+
+        </div>
+
+        </div>
+      
       }
     >
       <Head title="Project" />
-      <div className='flex justify-end items-center p-4'>
-        
-         <Link className='bg-green-500 text-white p-4 rounded-lg hover:bg-green-600' href={route('project.create')}>Add Project</Link>
-      </div>
+     {success &&  <div className='bg-green-500 text-white m-4 py-4 px-2 rounded-md w-fit '>
+      {success}
+      </div>}
+      
       <div className="overflow-x-auto rounded-lg shadow border border-gray-200 space-y-5 py-5 ">
   <table className="table-auto w-full text-sm text-left text-gray-800">
     <thead className="bg-gray-100 text-gray-700 uppercase text-xs">
