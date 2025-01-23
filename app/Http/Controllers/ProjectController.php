@@ -6,6 +6,7 @@ use App\Http\Requests\StoreProjectRequest;
 use App\Http\Requests\UpdateProjectRequest;
 use App\Models\Project;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
 class ProjectController extends Controller
@@ -18,7 +19,7 @@ class ProjectController extends Controller
         $sort_field=request("sort_field","created_at");
         $sort_direction =request("sort_direction","asc");
         $projects = Project::orderBy($sort_field,$sort_direction)->with("createdby","updatedby")->paginate(10);
-        return Inertia::render("Project/Index", ["projects"=>$projects,"sort_field"=>$sort_field,"sort_direction"=>$sort_direction]);
+        return Inertia::render("Project/Index", ["projects"=>$projects,"sort_field"=>$sort_field,"sort_direction"=>$sort_direction,"success"=>session("success")]);
     }
 
     /**
@@ -34,7 +35,12 @@ class ProjectController extends Controller
      */
     public function store(StoreProjectRequest $request)
     {
-        //
+       $data= $request->validated();
+       /* dd("project infos:", $data); */
+       $data['created_by']=Auth::user()->id;
+       $data['updated_by']=Auth::user()->id;
+        Project::create($data);
+       return redirect()->route("project.index")->with("success","project created with success!!");
     }
 
     /**
