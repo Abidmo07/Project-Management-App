@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class UpdateProjectRequest extends FormRequest
 {
@@ -11,7 +12,7 @@ class UpdateProjectRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +23,11 @@ class UpdateProjectRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            "image"=>['nullable','image'],
+            "name"=> ['max:255'],
+            "description"=> 'string',
+            "status"=>[Rule::in(['pending','completed','in_progress'])],
+            "due_date"=>['nullable','date'],
         ];
     }
 }

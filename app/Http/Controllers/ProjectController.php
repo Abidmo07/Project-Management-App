@@ -5,8 +5,9 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreProjectRequest;
 use App\Http\Requests\UpdateProjectRequest;
 use App\Models\Project;
-use Illuminate\Http\Request;
+use App\Models\Task;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 
 class ProjectController extends Controller
@@ -39,6 +40,13 @@ class ProjectController extends Controller
        /* dd("project infos:", $data); */
        $data['created_by']=Auth::user()->id;
        $data['updated_by']=Auth::user()->id;
+       if($request->hasFile('image')){
+
+        $file=$request->file('image');
+        $data['image_path']=$file->store('projects' ,'public');
+       }
+      
+
         Project::create($data);
        return redirect()->route("project.index")->with("success","project created with success!!");
     }
@@ -64,32 +72,36 @@ class ProjectController extends Controller
      */
     public function update(UpdateProjectRequest $request, Project $project)
     {
-        //
+        
+        $data = $request->validated();
+        $image=$request->file('image')?? null;
+        if($image){
+            if($project->image_path){
+                Storage::disk('public')->delete($project->image_path);
+            }
+            $data['image_path']=$image->store('projects','public');
+        } 
+        $project->update($data);
+    
+        // Redirect back with a success message
+        return redirect()->route('project.index')->with('success', 'Project details updated successfully!');
     }
+    
 
     /**
      * Remove the specified resource from storage.
      */
     public function destroy(Project $project)
     {
-        //
+        Task::where("project_id",$project->id)->delete();
+        if($project->image_path){
+            Storage::disk('public')->delete($project->image_path);
+        }
+        $project->delete();
+
+        return redirect()->route("project.index")->with("success","project deleted with success");
     }
 
-  /*   public function sort(Request $request, $column)
-    {
-        $sorted_direction = $request->input('direction', 'asc');
-        
-        // Invert sorting direction
-        $new_direction = ($sorted_direction == 'asc') ? 'desc' : 'asc';
-        
-        // Sort the projects based on the provided column and direction
-        $projects = Project::orderBy($column, $new_direction)->paginate(10);
-    
-        // Pass the sorted projects and direction to the Inertia view
-        return Inertia::render('Project/Index', [
-            'projects' => $projects,
-            'direction' => $new_direction,  // Pass the new direction to the frontend
-        ]);
-    } */
+
     
 }

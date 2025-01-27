@@ -52,6 +52,10 @@ export default function Index({ projects,sort_direction,sort_field,success }) {
 
 
   },[selecte])
+
+  const handleDelete=(projectId)=>{
+    router.delete(route(`project.destroy`,projectId))
+  }
   return (
     <AuthenticatedLayout 
       header={
@@ -147,15 +151,19 @@ export default function Index({ projects,sort_direction,sort_field,success }) {
         <tr key={project.id} className="bg-white hover:bg-gray-50">
        <td className="px-6 py-3">{project.id}</td>
        <td className="px-6 py-3"> <Link href={route('project.show',project.id)}>{project.name}</Link> </td>
-       <td className="px-6 py-3"><img className='w-20' src={project.image_path} alt={project.name} /></td>
+       <td className="px-6 py-3">
+  <img className="w-20" src={`/storage/${project.image_path}`} alt={project.name} />
+</td>
        <td className="px-6 py-3">{project.description}</td>
        <td className={`px-6 py-3 text-center  ${project.status=='pending'?'bg-yellow-300':
          project.status=='in_progress'?"bg-blue-600":"bg-green-600"
        }`}>{project.status}</td>
        <td className="px-6 py-3">{project.due_date.slice(0,10)}</td>
-       <td className="px-6 py-3 space-x-5">
-         <Link className='bg-blue-600 text-white rounded-md p-3' href={route('project.edit',project.id)}>Edit</Link>
-         <Link className='bg-red-600 text-white rounded-md p-3' href={route('project.destroy',project.id)}>Delete</Link>
+       <td className="px-6 py-3 space-x-5 flex items-center ">
+        
+        <Link className='bg-blue-600 text-white rounded-md p-3' href={route('project.edit',project.id)}>Edit</Link>
+        
+         <button className='bg-red-600 text-white rounded-md p-3' onClick={()=>handleDelete(project.id)}>Delete</button>
        </td>
      </tr>
      ))}

@@ -13,7 +13,7 @@ export default function Show({project}) {
         <div className="min-h-screen flex items-center justify-center bg-gray-100 p-4">
             <div className="w-full max-w-2xl mx-auto p-6 border border-gray-300 rounded-lg shadow-lg bg-white transition-transform transform hover:scale-105">
                 <img 
-                    src={project.image_path} 
+                    src={`/storage/${project.image_path}`} 
                     alt={project.name} 
                     className="w-full h-48 object-cover rounded-lg mb-4" 
                 />

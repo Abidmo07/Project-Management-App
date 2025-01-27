@@ -30,8 +30,8 @@ const {data,setData,post,errors,reset}=  useForm({
                             <form onSubmit={handleSubmition} className='flex flex-col gap-2'>
                               <div className='flex flex-col gap-1'>
                                  <label htmlFor="image">Upload Image:</label>
-                              <input value={data.image} onChange={(e)=>{
-                                setData("image",e.target.value);
+                              <input  onChange={(e)=>{
+                                setData("image",e.target.files[0]);
                               }} type="file" name="image"  />
                               </div>
                               {errors.image && <div className='text-red-500'>{errors.image}</div>}

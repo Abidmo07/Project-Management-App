@@ -22,11 +22,8 @@ Route::middleware(['auth','verified'])->group(function () {
         return Inertia::render('Dashboard');
     })->name('dashboard');
     Route::resource('/project', ProjectController::class);
-    Route::get('/project/sort',[ProjectController::class,'sort'])->name('project.sort');
     Route::resource('/task', TaskController::class);
-    Route::get('/task/sort',[TaskController::class,'sort'])->name('task.sort');
     Route::resource('/user', UserController::class);
-    Route::get('/user/sort',[UserController::class,'sort'])->name('user.sort');
 });
 
 
